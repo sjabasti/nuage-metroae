@@ -177,7 +177,7 @@
     delegate_to: localhost
     retries: 5
     delay: 30
-    until: health_status.status in [200,503] and health_status.json[0].status == 'BAD'
+    until: health_status.status in [200,503] and health_status.json[0].status != 'BAD'
     ignore_errors: yes
 
   - name: Check the HTTP response of the health status query
