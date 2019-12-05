@@ -190,7 +190,7 @@
       that: "not {{ health_status.json[0].status == 'BAD' }}"
       fail_msg: "VSD health checks failed due to: {{ health_status.json[0].summary | default('Unknown') }}"
 
-  when: inventory_hostname in groups[‘primary_vsds’]
+  when: inventory_hostname in groups['primary_vsds']
 
 - name: Get monit summary for vsd processes
   vsd_monit:
