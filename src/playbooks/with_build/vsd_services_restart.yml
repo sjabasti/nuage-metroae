@@ -5,7 +5,12 @@
   roles:
     - vsd-services-stop
 
-- hosts: vsds
+- hosts: primary_vsds
+  gather_facts: no
+  roles:
+    - vsd-services-start
+
+- hosts: standby_vsds
   gather_facts: no
   roles:
     - vsd-services-start
