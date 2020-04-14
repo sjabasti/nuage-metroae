@@ -559,33 +559,26 @@ function pull {
         echo ""
         write_to_screen_and_script_log ">>> Pulling the MetroAE container image from Nokia registry"
         echo ""
-        if [[ -f $SCRIPT_LOG_FILE ]]; then
-            if [ -w "$SCRIPT_LOG_FILE" ]; then
-                debug "Script log is writable"
-                sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION | tee -a $SCRIPT_LOG_FILE
-            else
-                if [ -z $METROAE_WRITE_WARNING_PRINTED ]; then
-                    print_write_permission_warning
-                    METROAE_WRITE_WARNING_PRINTED=1
-                fi
-                debug "Script log is not writable"
-                sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION
-            fi
+        debug "sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION"
+        set +e
+        output=$(sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION)
+        debug "$output"
+        set -e
+        write_to_screen_and_script_log "$output"
+        if [[ $output == *"Image is up to date"* ]]; then
+            echo ""
+            write_to_screen_and_script_log "MetroAE container image is already up to date. Nothing to do."
+        elif [[ $output == *"$METRO_AE_IMAGE:$MAX_CONTAINER_VERSION"* ]]; then
+            echo ""
+            write_to_screen_and_script_log "Successfully pulled the MetroAE container image from $repo"
         else
-            debug "Script log is not found"
-            sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION
+            write_to_screen_and_script_log "Attempt to pull the $MAX_CONTAINER_VERSION MetroAE container image failed. Quitting."
+            return 1
         fi
-    fi
-
-    status=$?
-    if [[ $status -ne 0 ]]; then
-        write_to_screen_and_script_log "Attempt to pull the $MAX_CONTAINER_VERSION MetroAE container image failed. Quitting."
-    else
-        write_to_screen_and_script_log "Successfully pulled the MetroAE container image from $repo"
     fi
     set -e
 
-    return $status
+    return 0
 }
 
 function run_container {
