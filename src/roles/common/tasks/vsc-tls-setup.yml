@@ -9,6 +9,9 @@
     ssh_user: "{{ vsc_creds.username }}"
     check_login: True
 
+- name: Reset connection to vsc
+  metra: reset_connection
+
 - block:
   - block:
     - name: Copy external certificates
