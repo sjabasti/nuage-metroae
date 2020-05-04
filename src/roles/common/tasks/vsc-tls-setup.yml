@@ -10,7 +10,7 @@
     check_login: True
 
 - name: Reset connection to vsc
-  metra: reset_connection
+  meta: reset_connection
 
 - block:
   - block:
