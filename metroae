@@ -559,11 +559,15 @@ function pull {
         echo ""
         write_to_screen_and_script_log ">>> Pulling the MetroAE container image from Nokia registry"
         echo ""
-        debug "sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION"
-        set +e
-        output=$(sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION)
-        debug "$output"
-        set -e
+        #debug "sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION"
+        #set +e
+        exec 5>&1
+        output=$(sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION 2>&1 | tee >(cat - >&5); exit $(PIPESTATUS[0])))
+        exit_code=$?
+        echo "Output: $output"
+        echo "Exit Code: $exit_code"
+        #debug "$output"
+        #set -e
         write_to_screen_and_script_log "$output"
         if [[ $output == *"Image is up to date"* ]]; then
             echo ""
