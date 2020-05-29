@@ -568,7 +568,7 @@ function pull {
         #debug "sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION"
         #set +e
         exec 5>&1
-        output=$(sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION 2>&1 | tee >(cat - >&5); exit $(PIPESTATUS[0])))
+        output=$(sudo docker pull $METRO_AE_IMAGE:$MAX_CONTAINER_VERSION 2>&1 | tee >(cat - >&5); exit ${PIPESTATUS[0]})
         exit_code=$?
         echo "Output: $output"
         echo "Exit Code: $exit_code"
