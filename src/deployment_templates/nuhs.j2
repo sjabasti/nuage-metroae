@@ -12,12 +12,25 @@
 # NUH {{ loop.index }}
 #
 -
-    ##### Management Interface
+    ##### Host and VM Name
 
     # < Hostname >
     # Hostname of the Nuage Utility Host instance
     #
     hostname: "{{ item.hostname }}"
+
+    # < VM name >
+    # Name of the Virtual Machine on the Hypervisor
+    #
+    {%- if item.vmname is defined %}
+    vmname: "{{ item.vmname }}"
+    {%- else %}
+    # vmname: (Hostname)
+    {%- endif %}
+
+    ######################
+
+    ##### Management Interface
 
     # < Management IP address >
     # IP address of the management interface
@@ -53,7 +66,7 @@
     {%- if item.internal_ip_prefix is defined %}
     internal_ip_prefix: {{ item.internal_ip_prefix }}
     {%- else %}
-    # internal_ip_prefix: ""
+    # internal_ip_prefix: 0
     {%- endif %}
 
     # < Internal Network Gateway IP >

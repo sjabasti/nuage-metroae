@@ -4,7 +4,11 @@
 #
 component_type: vsc
 target_server_type: {{ item.target_server_type }}
+{% if item.hostname is defined %}
 hostname: {{ item.hostname }}
+{% else %}
+hostname: {{ item.mgmt_ip }}
+{% endif %}
 
 {% if item.system_name is defined %}
 system_name: {{ item.system_name }}
@@ -16,8 +20,10 @@ target_server: {{ item.target_server }}
 
 {% if item.vmname is defined %}
 vmname: {{ item.vmname }}
-{% else %}
+{% elif item.hostname is defined %}
 vmname: {{ item.hostname }}
+{% else %}
+vmname: {{ item.mgmt_ip }}
 {% endif %}
 
 {% if item.vlan_id is defined %}
@@ -108,7 +114,11 @@ system_ip: {{ item.system_ip }}
 {% endif %}
 
 xmpp:
-  username: {{ item.xmpp_username | default(item.vmname) }}
+{% if item.xmpp_username is defined %}
+  username: {{ item.xmpp_username }}
+{% else %}
+  username: {{ item.vmname | default(item.hostname) }}
+{% endif %}
 
 expected_num_bgp_peers :  {{ item.expected_num_bgp_peers | default('0') }}
 expected_num_vswitches :  {{ item.expected_num_vswitches | default('0') }}
