@@ -15,8 +15,6 @@
     ssh_host: "{{ hostname }}"
     host_username: "{{ vsd_default_username }}"
 
-- name: Renew VSD ejabberd license
-  import_tasks: renew_ejabberd_license.yml
 
 - name: "Check if monit is already configured (ignoring errors)"
   command: monit summary
@@ -255,6 +253,12 @@
 
     when: vsd_run_disk_performance_test
 
+
+
+  - name: Renew VSD ejabberd license
+    import_tasks: renew_ejabberd_license.yml
+
+
   - block:
 
     - name: Install VSD software on standalone node (Can take 20 minutes)
@@ -316,6 +320,18 @@
       - master_vcin is defined
 
   - block:
+
+    - name: fix resolv.conf
+      become: yes
+      when: inventory_hostname == first_cluster_node_to_install or inventory_hostname == second_cluster_node_to_install or inventory_hostname == third_cluster_node_to_install
+      copy:
+        content: |
+          nameserver {{ dns_server_list.0 }}
+        dest: "/etc/resolv.conf"
+        force: yes
+        group: root
+        owner: root
+        mode: 644
 
     - name: Install VSD software on the first cluster node (Can take 20 minutes)
       command: >-

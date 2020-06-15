@@ -661,6 +661,24 @@
             "items": {
                 "type": "string"
             }
+        },
+        "openstack_project_id": {
+            "type": "string",
+            "title": "OpenStack...",
+            "description": "...",
+            "default": "",
+            "target_server_type": "openstack",
+            "sectionEnd": "OpenStack",
+            "propertyOrder": 750
+        },
+        "openstack_user_domain_name": {
+            "type": "string",
+            "title": "OpenStack...",
+            "description": "...",
+            "default": "",
+            "target_server_type": "openstack",
+            "sectionEnd": "OpenStack",
+            "propertyOrder": 760
         }
     },
     "required": ["nuage_unzipped_files_dir", "dns_domain", "vsd_fqdn_global", "mgmt_bridge", "data_bridge", "ntp_server_list", "dns_server_list"]
